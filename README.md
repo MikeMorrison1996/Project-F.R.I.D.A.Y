@@ -1,5 +1,9 @@
 # FRIDAY - The AI Brain (Chrome Extension v1)
-[Screen Recording 2025-04-12 013103.mp4](..%2F..%2F..%2F..%2F..%2FVideos%2FScreen%20Recordings%2FScreen%20Recording%202025-04-12%20013103.mp4)
+
+
+
+https://github.com/user-attachments/assets/bc85ea34-2901-4835-bafa-3b6e95094693
+
 
 
 FRIDAY is the visual brain for a new kind of AI assistant — fully reactive, voice-enabled, and built to evolve.  
