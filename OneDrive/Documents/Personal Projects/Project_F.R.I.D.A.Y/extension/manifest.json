@@ -1,0 +1,11 @@
+{
+  "name": "FRIDAY Orb",
+  "description": "A listening orb with visual effects.",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "FRIDAY"
+  },
+  "permissions": ["storage"]
+}
