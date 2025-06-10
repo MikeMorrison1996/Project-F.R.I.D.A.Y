@@ -1,35 +1,41 @@
-// Three.js setup
+// Simple orb visualization with pulsing effect
 const canvas = document.getElementById('orbCanvas');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+const ctx = canvas.getContext('2d');
 
-const geometry = new THREE.SphereGeometry(1, 32, 32);
-const material = new THREE.MeshStandardMaterial({ color: 0x00ffff, emissive: 0x0088ff, emissiveIntensity: 0.5 });
-const sphere = new THREE.Mesh(geometry, material);
-scene.add(sphere);
-
-const ambient = new THREE.AmbientLight(0xffffff, 0.5);
-scene.add(ambient);
-const point = new THREE.PointLight(0xffffff, 1);
-point.position.set(5, 5, 5);
-scene.add(point);
-
-camera.position.z = 3;
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
 
 let pulse = 0;
 let listening = false;
+const baseRadius = 80;
+
+function drawOrb() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const scale = listening ? 1 + Math.sin(pulse) * 0.1 : 1;
+  const r = baseRadius * scale;
+  const g = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, r * 0.1, cx, cy, r);
+  g.addColorStop(0, '#00ffff');
+  g.addColorStop(1, '#001122');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fill();
+}
 
 function animate() {
   requestAnimationFrame(animate);
-  sphere.rotation.y += 0.01;
   if (listening) {
     pulse += 0.1;
-    const scale = 1 + Math.sin(pulse) * 0.1;
-    sphere.scale.set(scale, scale, scale);
+  } else {
+    pulse = 0;
   }
-  renderer.render(scene, camera);
+  drawOrb();
 }
 animate();
 
@@ -44,8 +50,14 @@ if (SpeechRecognition) {
     const res = event.results[event.results.length - 1][0].transcript.trim();
     console.log('Heard:', res);
   };
-  recognition.onstart = () => { btn.textContent = 'Stop Listening'; listening = true; };
-  recognition.onend = () => { btn.textContent = 'Start Listening'; listening = false; sphere.scale.set(1,1,1); };
+  recognition.onstart = () => {
+    btn.textContent = 'Stop Listening';
+    listening = true;
+  };
+  recognition.onend = () => {
+    btn.textContent = 'Start Listening';
+    listening = false;
+  };
   btn.addEventListener('click', () => {
     if (listening) {
       recognition.stop();
